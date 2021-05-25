@@ -1,0 +1,15 @@
+.navbar{
+    background-color: var(--back-color);
+    height: 9vh;
+    width: 97%;
+    margin: 0px auto;
+    color: var(--text-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 3px solid rgba(255, 255, 255, 0.7);
+}
+.navbar-brand,.navbar-link{
+    font-size: 2rem;
+    font-weight: 700;
+}

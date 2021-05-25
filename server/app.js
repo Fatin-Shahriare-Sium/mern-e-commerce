@@ -1,5 +1,6 @@
 let express=require('express')
 require('dotenv').config()
+let authRouter=require('./route/authRoute.js')
 let mongoose=require('mongoose')
 mongoose.connect(`mongodb+srv://${process.env.DATABASE_ADMIN}:${process.env.DATABASE_PASSWORD}@cluster0.czfmh.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`, {useNewUrlParser: true, useUnifiedTopology: true},()=>{
     console.log('MongoDB connected successfully,Alhamdulillah');
@@ -10,6 +11,9 @@ let middleware=[
     express.json()
 ]
 app.use(middleware)
+app.use('/auth',authRouter)
 app.listen('5000',()=>{
     console.log('Server is running successfully,Alhamdulillah');
 })
+//chat functionalities https://crisp.chat
+//forntEND  https://dcel.xyz
