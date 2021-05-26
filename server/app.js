@@ -1,4 +1,5 @@
 let express=require('express')
+let cors=require('cors')
 require('dotenv').config()
 let authRouter=require('./route/authRoute.js')
 let mongoose=require('mongoose')
@@ -8,7 +9,8 @@ mongoose.connect(`mongodb+srv://${process.env.DATABASE_ADMIN}:${process.env.DATA
 let app=express()
 let middleware=[
     express.urlencoded({extended:true}),
-    express.json()
+    express.json(),
+    cors()
 ]
 app.use(middleware)
 app.use('/auth',authRouter)

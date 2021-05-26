@@ -1,0 +1,23 @@
+.addProduct{
+    width: 100%;
+    color: #000;
+}
+.uploadImg{
+    min-height: 50vh;
+    width: 97%;
+    margin: 0px auto;
+    background-color: rgba(221 ,223 ,219,1);
+    border-radius: 17px;
+}
+.uploadImg-btn{
+    width: max-content;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    margin: 0% auto;
+}
+.uploadImg-btn input{
+    opacity: 0;
+    position: absolute;
+}

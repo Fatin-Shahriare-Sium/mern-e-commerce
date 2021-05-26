@@ -3,6 +3,7 @@ import './app.css';
 import Navbar from './navbar/navbar';
 import LoginBox from './loginBox/loginBox';
 import {BrowserRouter,Switch,Route} from 'react-router-dom'
+import Dasboard from './dasboard/dasboard';
 function App() {
   return (
     <div className="app">
@@ -10,12 +11,12 @@ function App() {
 
       <Switch>
 
-          <Route path='/'>
+          <Route exact path='/'>
             <LoginBox/>
           </Route>
 
-          <Route>
-            
+          <Route path='/dasboard'>
+            <Dasboard/>
           </Route>
 
       </Switch>

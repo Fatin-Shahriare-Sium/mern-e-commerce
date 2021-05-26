@@ -7,7 +7,7 @@ let productSchema=new Schema({
     priceOff:Number,
     brands:String,
     qty:Number,
-    InStock:Boolean,
+    img:Array,//{src:'',alt:''}
     reviews:[{
         type:Schema.Types.ObjectId,
         ref:'review'
