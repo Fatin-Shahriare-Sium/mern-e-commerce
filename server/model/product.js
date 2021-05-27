@@ -5,7 +5,7 @@ let productSchema=new Schema({
     description:String,
     price:Number,
     priceOff:Number,
-    brands:String,
+    brand:String,
     qty:Number,
     img:Array,//{src:'',alt:''}
     reviews:[{
