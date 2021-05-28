@@ -1,12 +1,51 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './add-product.css'
 import upload from '../assets/upload.svg'
 import ImgUploaderPreview from './img-uploader-preview'
 import useCreateProduct from '../hooks/useCreateProduct'
+import { useLocation, useParams } from 'react-router'
+
 const AddProduct = () => {
     let [imgContainer,setImgContainer]=useState([])
-    let {handleCreateProduct}=useCreateProduct()
+    let [edit,setEdit]=useState(false)
+    let {handleCreateProduct,error}=useCreateProduct()
     //cd backend/mern-cart
+       let location=useLocation()
+       let {id}=useParams()
+    useEffect(()=>{
+        let name=document.getElementById('name')
+        let des=document.getElementById('description')
+        let price=document.getElementById('price')
+        let priceoff=document.getElementById('priceoff')
+        let qty=document.getElementById('qty')
+        let brand=document.getElementById('brand')
+        if(location.pathname==`/dasboard/product/edit/${id}`){
+            console.log('in location'+id);
+            fetch(`http://localhost:5000/product/${id}`,{
+                method:'GET'
+            }).then(res=>res.json())
+            .then(data=>{
+                console.log(data);
+                name.value=data.singleProduct.title
+                des.innerHTML=data.singleProduct.description
+                price.value=data.singleProduct.price
+                priceoff.value=data.singleProduct.priceOff
+                qty.value=data.singleProduct.qty
+                brand.value=data.singleProduct.brand
+                setEdit(true)
+                setImgContainer(data.singleProduct.img)
+            })
+        }
+        
+    },[])
+
+
+
+
+
+
+
+
     let handleImgUploader=(e)=>{
         e.preventDefault()
         let picx=e.target.files[0]
@@ -50,30 +89,31 @@ const AddProduct = () => {
     return (
         <div className='addProduct'>
             <p style={{textAlign:'center',fontSize:'2.3rem',color:'#000000',fontWeight:'700'}}>Add Product</p>
-            <form onSubmit={(event)=>handleCreateProduct(event)}>
+            {error && <p classname={`alert alert-${error.color}`}>{error.msg}</p>}
+            <form onSubmit={(event)=>handleCreateProduct(event,imgContainer,edit,id)}>
                 <div class="mb-3">
                     <label for="exampleInputEmail1" class="form-label">Title</label>
-                    <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"/>
+                    <input type="text" class="form-control" id='name' aria-describedby="emailHelp"/>
                 </div>
                 <div class="mb-3">
                     <label for="exampleInputPassword1" class="form-label">Description</label>
-                    <textarea  class="form-control" id="exampleInputPassword1"/>
+                    <textarea  class="form-control" id='description' />
                 </div>
                 <div class="mb-3">
                     <label for="exampleInputPassword1" class="form-label">Price</label>
-                    <input  class="form-control" />
+                    <input id='price' class="form-control" />
                 </div>
                 <div class="mb-3">
                     <label for="exampleInputPassword1" class="form-label">Price off</label>
-                    <input  class="form-control" />
+                    <input id='priceoff' class="form-control" />
                 </div>
                 <div class="mb-3">
                     <label for="exampleInputPassword1" class="form-label">Quantity</label>
-                    <input  class="form-control" />
+                    <input id='qty'  class="form-control" />
                 </div>
                 <div class="mb-3">
                     <label for="exampleInputPassword1" class="form-label">Brands</label>
-                    <select>
+                    <select id='brand'>
                         <option value='apple'>Apple</option>
                         <option value='xiaomi'>Xiaomi</option>
                         <option value='realme'>Realme</option>

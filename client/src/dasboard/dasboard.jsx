@@ -8,6 +8,7 @@ import add from '../assets/add.svg'
 import list from '../assets/list.svg'
 import order from '../assets/order.svg'
 import AddProduct from '../add product/add-product';
+import AllProduct from '../all product/all-product';
 const Dasboard = () => {
     let[cValue,setcValue]=useState('dasboard')
     return (
@@ -22,7 +23,7 @@ const Dasboard = () => {
                 <div className="dasboard-mainBox--sidebar">
                     <SidebarSingle href='/dasboard' handleClick={()=>setcValue('dasboard')} icon={dasboard} cValue={cValue} name={'dasboard'}/>
                     <SidebarSingle href='/dasboard/addproduct' handleClick={()=>setcValue('Add Product')} icon={add} cValue={cValue} name={'Add Product'}/>
-                    <SidebarSingle handleClick={()=>setcValue('All Product')} icon={list} cValue={cValue} name={'All Product'}/>
+                    <SidebarSingle href='/dasboard/allproduct' handleClick={()=>setcValue('All Product')} icon={list} cValue={cValue} name={'All Product'}/>
                     <SidebarSingle handleClick={()=>setcValue('Orders')} icon={order} cValue={cValue} name={'Orders'}/>
 
 
@@ -33,7 +34,13 @@ const Dasboard = () => {
                     <AddProduct/>
                 </Route>
 
-
+                <Route path='/dasboard/allproduct'>
+                    <AllProduct/>
+                </Route>
+                
+                <Route path='/dasboard/product/edit/:id'>
+                    <AddProduct/>
+                </Route>
 
                 
 

@@ -1,8 +1,9 @@
+import { useState } from "react"
 
 
 let useCreateProduct=()=>{
-
-    let handleCreateProduct=(e,imgContainer)=>{
+    let[error,setError]=useState('')
+    let handleCreateProduct=(e,imgContainer,edit,id)=>{
         e.preventDefault()
         let title=e.target[0].value
         let description=e.target[1].value
@@ -12,7 +13,7 @@ let useCreateProduct=()=>{
         let brand=e.target[5].value
         console.log(title);
         if(title && description && price){
-            fetch('http://localhost:5000/product/create',{
+            fetch(edit?`http://localhost:5000/product/edit/${id}`:'http://localhost:5000/product/create',{
                 method:'POST',
                 headers:{
                     'Content-Type': 'application/json'
@@ -24,14 +25,17 @@ let useCreateProduct=()=>{
                     priceOff,
                     qty,
                     brand,
-                    // img:imgContainer
+                    img:imgContainer
                 })
             }).then(res=>res.json())
-            .then(data=>console.log(data))
+            .then(data=>{
+                console.log(data);
+                setError({msg:data.msg,color:data.color})
+            })
         }
     }
 
-    return {handleCreateProduct}
+    return {handleCreateProduct,error}
 }
 
 export default useCreateProduct;
