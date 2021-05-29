@@ -19,6 +19,7 @@ const AddProduct = () => {
         let priceoff=document.getElementById('priceoff')
         let qty=document.getElementById('qty')
         let brand=document.getElementById('brand')
+        let category=document.getElementById('category')
         if(location.pathname==`/dasboard/product/edit/${id}`){
             console.log('in location'+id);
             fetch(`http://localhost:5000/product/${id}`,{
@@ -32,6 +33,7 @@ const AddProduct = () => {
                 priceoff.value=data.singleProduct.priceOff
                 qty.value=data.singleProduct.qty
                 brand.value=data.singleProduct.brand
+                category.value=data.singleProduct.category
                 setEdit(true)
                 setImgContainer(data.singleProduct.img)
             })
@@ -117,7 +119,28 @@ const AddProduct = () => {
                         <option value='apple'>Apple</option>
                         <option value='xiaomi'>Xiaomi</option>
                         <option value='realme'>Realme</option>
+                        <option value='asus'>Asus</option>
+                        <option value='intel'>Intel</option>
+                        <option value='acer'>Acer</option>
+                        <option value='lenovo'>Lenovo</option>
+                        <option value='hero'>Hero</option>
+                        <option value='tvs'>TVS</option>
+                        <option value="samsung">Samsung</option>
+                        <option value='naviforce'>naviforce [watch]</option>
+                        <option value="walton">Walton</option>
                         <option value='easy'>Easy Fashion</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="exampleInputPassword1" class="form-label">Category</label>
+                    <select id='category'>
+                        <option value='desktop'>Desktop</option>
+                        <option value='laptop'>Laptop</option>
+                        <option value='watch'>Watch</option>
+                        <option value='motor bike'>Motor Bike</option>
+                        <option value='smart phone'>Smart Phone</option>
+                        <option value="tv">Smart tv & Android Tv</option>
+                        <option value="ac">Smart AC</option>
                     </select>
                 </div>
                 <div class="mb-3 uploadImg">

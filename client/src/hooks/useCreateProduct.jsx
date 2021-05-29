@@ -11,7 +11,8 @@ let useCreateProduct=()=>{
         let priceOff=e.target[3].value
         let qty=e.target[4].value
         let brand=e.target[5].value
-        console.log(title);
+        let category=e.target[6].value
+
         if(title && description && price){
             fetch(edit?`http://localhost:5000/product/edit/${id}`:'http://localhost:5000/product/create',{
                 method:'POST',
@@ -25,6 +26,7 @@ let useCreateProduct=()=>{
                     priceOff,
                     qty,
                     brand,
+                    category,
                     img:imgContainer
                 })
             }).then(res=>res.json())

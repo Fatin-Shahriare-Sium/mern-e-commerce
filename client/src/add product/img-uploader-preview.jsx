@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import './add-product.css'
-import login from '../assets/login.svg'
 const ImgUploaderPreview = ({src,alt,altHandler,id,deleteHandler}) => {
     useEffect(()=>{
         let altx=document.getElementById('alt')
