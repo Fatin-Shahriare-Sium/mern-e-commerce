@@ -1,6 +1,10 @@
 const User = require("../model/user")
 let bcrypt=require('bcrypt')
 let jwt=require('jsonwebtoken')
+
+
+//signup
+
 exports.signupPostController=async (req,res,next)=>{
     let {name,password,email}=req.body
     let hashed=await bcrypt.hash(password,10)
@@ -42,6 +46,8 @@ exports.signupPostController=async (req,res,next)=>{
     }
 }
 
+//login
+
 exports.loginPostController=async (req,res,next)=>{
     let {email,password}=req.body
     let user=await User.findOne({email:email})
@@ -70,4 +76,35 @@ exports.loginPostController=async (req,res,next)=>{
             color:'danger'
         })
     }   
+}
+
+
+exports.changepasswordPostController=async (req,res,next)=>{
+    let {token}=req.params
+    let {oldPass,newPass}=req.body
+    console.log(req.body);
+    let userThroughToken=await jwt.verify(token,'SECRET')
+
+    let user=await User.findOne({_id:userThroughToken.id})
+
+    let matchedPassword=await bcrypt.compare(oldPass,user.password)
+
+    if(matchedPassword){
+        let hasedPass=await bcrypt.hash(newPass,11)
+        await User.findOneAndUpdate({_id:user._id},{
+            $set:{'password':hasedPass}
+        })
+
+        res.json({
+            msg:'Successfully,changed password',
+            color:'success'
+        })
+    }else{
+
+        res.json({
+            msg:'Your have given wrong password',
+            color:'danger'
+        })
+    }
+
 }

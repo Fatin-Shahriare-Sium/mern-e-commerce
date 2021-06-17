@@ -7,7 +7,7 @@ let productSchema=new Schema({
     priceOff:Number,
     brand:String,
     category:String,
-    qty:Number,
+    remain:Number,
     img:Array,//{src:'',alt:''}
     reviews:[{
         type:Schema.Types.ObjectId,

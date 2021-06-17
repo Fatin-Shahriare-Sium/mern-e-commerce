@@ -11,7 +11,7 @@ exports.createProductController= async (req,res,next)=>{
         priceOff,
         brand,
         category,
-        qty,
+        remain:qty,
         img,
         reviews:[]
     })
