@@ -6,7 +6,13 @@ let userModel=new Schema({
     profilePic:String,
     password:String,
     admin:Boolean,
-    address:String,
+    gender:String,
+    brithDate:String,
+    contactNumber:String,
+    address:[{
+        type:Schema.Types.ObjectId,
+        ref:'address'
+    }],
     cartedItems:[{
         type:Schema.Types.ObjectId,
         ref:'product'
