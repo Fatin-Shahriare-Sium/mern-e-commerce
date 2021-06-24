@@ -1,10 +1,15 @@
-const { userInfoGetController, userInfoEditController } = require('../controller/userController')
+const { userInfoGetController, userInfoEditController, userWishlistController, userWishlistCheckerController, userWishlistDetailsController } = require('../controller/userController')
 
-let router=require('express').Router()
+let router = require('express').Router()
 
-router.get('/info/:id',userInfoGetController)
+router.get('/info/:id', userInfoGetController)
 
-router.post('/info/edit/:id',userInfoEditController)
+router.post('/info/edit/:id', userInfoEditController)
 
+router.get('/wishlist', userWishlistController)
 
-module.exports=router
+router.get('/wishlist/check', userWishlistCheckerController)
+
+router.get('/wishlist/detail', userWishlistDetailsController)
+
+module.exports = router
