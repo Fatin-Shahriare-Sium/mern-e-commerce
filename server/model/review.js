@@ -1,14 +1,14 @@
-let {Schema,model}=require('mongoose')
+let { Schema, model } = require('mongoose')
 
-let reviewSchema=new Schema({
-    user:[{
-        type:Schema.Types.ObjectId,
-        ref:'user'
+let reviewSchema = new Schema({
+    user: [{
+        type: Schema.Types.ObjectId,
+        ref: 'user'
     }],
-    ratings:Number,
-    reviewText:String
-})
+    ratings: Number,
+    reviewText: String
+}, { timestamps: true })
 
-let Review=model('review',reviewSchema)
+let Review = model('review', reviewSchema)
 
-module.exports=Review
+module.exports = Review

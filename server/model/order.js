@@ -7,7 +7,8 @@ let orderModel = new Schema({
     },
     address: {
         type: Schema.Types.ObjectId,
-        ref: 'address'
+        ref: 'address',
+
     },
     stripeEmail: String,
     product: Array,
@@ -16,8 +17,9 @@ let orderModel = new Schema({
     totalAmount: Number,
     paymentMethod: String,
     bkashTnxId: String,
-    nagadTnxId: String
-})
+    nagadTnxId: String,
+    orderTimeline: Array
+}, { timestamps: true })
 
 let Order = model('order', orderModel)
 
