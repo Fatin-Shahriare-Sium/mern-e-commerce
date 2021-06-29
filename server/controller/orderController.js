@@ -5,7 +5,7 @@ let stripe = require('stripe')('sk_test_51J4rHMFpIjqeQSowkMeG3KxDKxCEwxE3blfu4dk
 
 exports.orderCreateController = async (req, res, next) => {
     let { totalAmount, product, type, addressId, user, bkashTnxId, nagadTnxId, token } = req.body
-    console.log(req.body);
+
     if (type == 'card') {
         let newOrder = new Order({
             user: user._id,
@@ -40,7 +40,7 @@ exports.orderCreateController = async (req, res, next) => {
                 description: `payment by ${token.email} and totalAmount is ${totalAmount}`
             })
         }).then(result => {
-            res.status.json({
+            res.status(200).json({
                 msg: 'success'
             })
 
@@ -84,7 +84,9 @@ exports.orderCreateController = async (req, res, next) => {
 exports.getAllOrderController = async (req, res, next) => {
     let { userId } = req.params
 
-    let allOrderOfUser = await Order.find({ user: userId })
+    let allOrderOfUser = await Order.find({ user: userId }).populate({
+        path:'address'
+    })
 
     res.json({
         allOrderOfUser
