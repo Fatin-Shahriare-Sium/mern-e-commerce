@@ -18,6 +18,9 @@ const OrderDetails = () => {
     let [selectedId, setSelectedId] = useState('')
     let [orderSlider, setOrderSlider] = useState(false)
     let [edit, setEdit] = useState(false)
+    let [updateStatus, setUpdateStatus] = useState({ payment: '', order: '' })
+    let [error, setError] = useState({ msg: '', color: '' })
+
     useEffect(() => {
 
 
@@ -33,23 +36,87 @@ const OrderDetails = () => {
     }, [])
 
     useEffect(() => {
-        let paymentStatus = document.getElementById('payment-select')
-        let orderStatus = document.getElementById('order-select')
+
         if (selectedOrder) {
-            paymentStatus.value = selectedOrder.paymentStatus
-            orderStatus.value = selectedOrder.orderStatus
-            console.log(paymentStatus);
+
+            setUpdateStatus({ payment: selectedOrder.paymentStatus, order: selectedOrder.orderStatus })
+
         }
 
     }, [selectedOrder])
 
-    // useEffect(() => {
-    //     if (router.query.id) {
-    //         let idx = router.query.id
-    //         setSelectedId(idx)
-    //         return setSelectedOrder(orders.find(sig => sig._id == idx))
-    //     }
-    // }, [orders])
+
+
+
+    function sentUpdateData(preTime) {
+        console.log('sentUpdateData');
+        fetch(`${url}/order/update/${selectedOrder._id}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                updateStatus,
+                preTime
+            })
+        }).then(res => res.json())
+            .then(data => {
+                console.log(data);
+            })
+    }
+
+
+
+    function handleUpdate() {
+        if (updateStatus.order == 'pending') {
+            let preTime = {
+                prePendingTime: selectedOrder.orderTimeline[0] ? selectedOrder.orderTimeline[1].time : new Date().toLocaleString()
+            }
+            return sentUpdateData(preTime)
+        } else if (updateStatus.order == 'processing') {
+            let preTime = {
+                prePendingTime: selectedOrder.orderTimeline[0] ? selectedOrder.orderTimeline[1].time : new Date().toLocaleString()
+            }
+            return sentUpdateData(preTime)
+
+        } else if (updateStatus.order == 'shipped') {
+
+            let preTime = {
+                prePendingTime: selectedOrder.orderTimeline[0] ? selectedOrder.orderTimeline[0].time : new Date().toLocaleString(),
+                preProcessingTime: selectedOrder.orderTimeline[1] ? selectedOrder.orderTimeline[1].time : new Date().toLocaleString()
+            }
+            return sentUpdateData(preTime)
+        } else if (updateStatus.order == 'deliverd') {
+            let preTime = {
+                prePendingTime: selectedOrder.orderTimeline[0] ? selectedOrder.orderTimeline[0].time : new Date().toLocaleString(),
+                preProcessingTime: selectedOrder.orderTimeline[1] ? selectedOrder.orderTimeline[1].time : new Date().toLocaleString(),
+                preShippedTime: selectedOrder.orderTimeline[2] ? selectedOrder.orderTimeline[2].time : new Date().toLocaleString()
+
+            }
+            return sentUpdateData(preTime)
+        }
+
+    }
+
+    function isNeedToUpdateOrder() {
+        console.log(updateStatus);
+        if (updateStatus.payment == selectedOrder.paymentStatus && updateStatus.order == selectedOrder.orderStatus) {
+            console.log('isNeedToUpdateOrdefunxc call');
+            setError({
+                msg: 'No need to Update',
+                color: 'warning'
+            })
+            console.log('No need to Update');
+        } else {
+            handleUpdate()
+            toogleEdit()
+            return setError({
+                msg: 'successfully Updated',
+                color: 'success'
+            })
+        }
+    }
+
 
     function toogleEdit() {
         setEdit(pre => !pre)
@@ -86,14 +153,14 @@ const OrderDetails = () => {
 
                     {/* Changing Payment Status start */}
 
-                    <div style={{ display: 'flex', width: '90%', margin: '3% auto', fontSize: '1.5rem' }}>
+                    {edit && <div style={{ display: 'flex', width: '90%', margin: '3% auto', fontSize: '1.5rem' }}>
                         <p>Change Payment Status:</p>
-                        <select id='payment-select' className='ms-3'>
+                        <select value={updateStatus.payment} onChange={(event) => setUpdateStatus({ ...updateStatus, payment: event.target.value })} id='payment-select' className='ms-3'>
                             <option value="verifing">Verifing</option>
                             <option value="verified">Verified</option>
                             <option value="unpaid">Unpaid</option>
                         </select>
-                    </div>
+                    </div>}
 
                     {/* Changing Payment Status end */}
                     {selectedOrder && <SingleOrderProduct orderedProduct={selectedOrder.product} paymentStatus={selectedOrder.paymentStatus} totalAmount={selectedOrder.totalAmount} />}
@@ -103,21 +170,21 @@ const OrderDetails = () => {
 
                     {/* Changing Order Status start */}
 
-                    <div style={{ display: 'flex', width: '90%', margin: '3% auto', fontSize: '1.5rem' }}>
+                    {edit && <div style={{ display: 'flex', width: '90%', margin: '3% auto', fontSize: '1.5rem' }}>
                         <p>Change Order Status:</p>
-                        <select id='order-select' className='ms-3'>
+                        <select value={updateStatus.order} onChange={(event) => setUpdateStatus({ ...updateStatus, order: event.target.value })} id='order-select' className='ms-3'>
                             <option value="pending">Pending</option>
-                            <option value="Processing">Processing</option>
+                            <option value="processing">Processing</option>
                             <option value="shipped">Shipped</option>
                             <option value="deliverd">Deliverd</option>
                         </select>
-                    </div>
+                    </div>}
 
                     {/* Changing order Status end */}
 
                     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} className='mt-5'>
                         {edit ?
-                            <button onClick={toogleEdit} className='btn btn-outline-success w-50'>Update</button>
+                            <button onClick={isNeedToUpdateOrder} className='btn btn-outline-success w-50'>Update</button>
                             : <button onClick={() => toogleEdit()} className='btn btn-outline-primary w-50'>Edit</button>}
                     </div>
                     <div style={{ height: '10vh' }}>

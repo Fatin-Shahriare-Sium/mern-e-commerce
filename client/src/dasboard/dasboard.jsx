@@ -9,6 +9,7 @@ import list from '../assets/list.svg'
 import order from '../assets/order.svg'
 import AddProduct from '../add product/add-product';
 import AllProduct from '../all product/all-product';
+import DasboardHome from '../dasboard-home/dasboard-home';
 const Dasboard = () => {
     let [cValue, setcValue] = useState('dasboard')
     let history = useHistory()
@@ -33,6 +34,9 @@ const Dasboard = () => {
                     </div>
                     <div className="dasboard-mainBox--content">
                         <Switch>
+                            <Route exact path='/dasboard'>
+                                <DasboardHome />
+                            </Route>
                             <Route exact path='/dasboard/addproduct'>
                                 <AddProduct />
                             </Route>
