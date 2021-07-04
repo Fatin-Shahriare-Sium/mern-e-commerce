@@ -4,42 +4,45 @@ import upload from '../assets/upload.svg'
 import ImgUploaderPreview from './img-uploader-preview'
 import useCreateProduct from '../hooks/useCreateProduct'
 import { useLocation, useParams } from 'react-router'
+import TextEditor from '../text-editor'
 
 const AddProduct = () => {
-    let [imgContainer,setImgContainer]=useState([])
-    let [edit,setEdit]=useState(false)
-    let {handleCreateProduct,error}=useCreateProduct()
+    let [imgContainer, setImgContainer] = useState([])
+    let [edit, setEdit] = useState(false)
+    let { handleCreateProduct, error } = useCreateProduct()
+
     //cd backend/mern-cart
-       let location=useLocation()
-       let {id}=useParams()
-    useEffect(()=>{
-        let name=document.getElementById('name')
-        let des=document.getElementById('description')
-        let price=document.getElementById('price')
-        let priceoff=document.getElementById('priceoff')
-        let qty=document.getElementById('qty')
-        let brand=document.getElementById('brand')
-        let category=document.getElementById('category')
-        if(location.pathname==`/dasboard/product/edit/${id}`){
-            console.log('in location'+id);
-            fetch(`http://localhost:5000/product/${id}`,{
-                method:'GET'
-            }).then(res=>res.json())
-            .then(data=>{
-                console.log(data);
-                name.value=data.singleProduct.title
-                des.innerHTML=data.singleProduct.description
-                price.value=data.singleProduct.price
-                priceoff.value=data.singleProduct.priceOff
-                qty.value=data.singleProduct.qty
-                brand.value=data.singleProduct.brand
-                category.value=data.singleProduct.category
-                setEdit(true)
-                setImgContainer(data.singleProduct.img)
-            })
+    let location = useLocation()
+    let { id } = useParams()
+    useEffect(() => {
+        let name = document.getElementById('name')
+        let price = document.getElementById('price')
+        let priceoff = document.getElementById('priceoff')
+        let qty = document.getElementById('qty')
+        let brand = document.getElementById('brand')
+        let category = document.getElementById('category')
+        localStorage.setItem('__description', '')
+        if (location.pathname == `/dasboard/product/edit/${id}`) {
+            console.log('in location' + id);
+            fetch(`http://localhost:5000/product/${id}`, {
+                method: 'GET'
+            }).then(res => res.json())
+                .then(data => {
+                    console.log(data);
+                    name.value = data.singleProduct.title
+                    localStorage.setItem('__description', data.singleProduct.description)
+                    price.value = data.singleProduct.price
+                    priceoff.value = data.singleProduct.priceOff
+                    qty.value = data.singleProduct.remain
+                    // qty.value = 100
+                    brand.value = data.singleProduct.brand
+                    category.value = data.singleProduct.category
+                    setEdit(true)
+                    setImgContainer(data.singleProduct.img)
+                })
         }
-        
-    },[])
+
+    }, [])
 
 
 
@@ -48,58 +51,59 @@ const AddProduct = () => {
 
 
 
-    let handleImgUploader=(e)=>{
+    let handleImgUploader = (e) => {
         e.preventDefault()
-        let picx=e.target.files[0]
+        let picx = e.target.files[0]
         const data = new FormData();
-        data.append('file',picx)
+        data.append('file', picx)
         data.append('upload_preset', 'taskman');
-        fetch('https://api.Cloudinary.com/v1_1/sium/image/upload',{
-            method:'POST',
-            body:data
-        }).then(res=>res.json())
-        .then((data)=>{
-            console.log(data)
-            let id=data.asset_id
-            let src=data.url
-            let alt=''
-            let imgObj={
-                id,
-                src,
-                alt
-            }
-            setImgContainer(()=>[...imgContainer,imgObj])
-        })
-        
-        
+        fetch('https://api.Cloudinary.com/v1_1/sium/image/upload', {
+            method: 'POST',
+            body: data
+        }).then(res => res.json())
+            .then((data) => {
+                console.log(data)
+                let id = data.asset_id
+                let src = data.url
+                let alt = ''
+                let imgObj = {
+                    id,
+                    src,
+                    alt
+                }
+                setImgContainer(() => [...imgContainer, imgObj])
+            })
+
+
     }
 
-    let altHandler=(e,id)=>{
+    let altHandler = (e, id) => {
         e.preventDefault()
-        let preImgContainer=[...imgContainer]
-        let indexOFimg=preImgContainer.findIndex(sig=>sig.id==id)
-        preImgContainer[indexOFimg].alt=e.target.value
+        let preImgContainer = [...imgContainer]
+        let indexOFimg = preImgContainer.findIndex(sig => sig.id == id)
+        preImgContainer[indexOFimg].alt = e.target.value
 
         console.log(preImgContainer);
-        setImgContainer(()=>preImgContainer)
+        setImgContainer(() => preImgContainer)
     }
 
-    let deleteHandler=(id)=>{
-        let filterImgContainer=imgContainer.filter(sig=>sig.id !== id)
-        setImgContainer(()=>filterImgContainer)
+    let deleteHandler = (id) => {
+        let filterImgContainer = imgContainer.filter(sig => sig.id !== id)
+        setImgContainer(() => filterImgContainer)
     }
     return (
         <div className='addProduct'>
-            <p style={{textAlign:'center',fontSize:'2.3rem',color:'#000000',fontWeight:'700'}}>Add Product</p>
+            <p style={{ textAlign: 'center', fontSize: '2.3rem', color: '#000000', fontWeight: '700' }}>Add Product</p>
             {error && <p classname={`alert alert-${error.color}`}>{error.msg}</p>}
-            <form onSubmit={(event)=>handleCreateProduct(event,imgContainer,edit,id)}>
+            <form onSubmit={(event) => handleCreateProduct(event, imgContainer, edit, id)}>
                 <div class="mb-3">
                     <label for="exampleInputEmail1" class="form-label">Title</label>
-                    <input type="text" class="form-control" id='name' aria-describedby="emailHelp"/>
+                    <input type="text" class="form-control" id='name' aria-describedby="emailHelp" />
                 </div>
                 <div class="mb-3">
                     <label for="exampleInputPassword1" class="form-label">Description</label>
-                    <textarea  class="form-control" id='description' />
+                    {/* <textarea class="form-control" id='description' /> */}
+                    <TextEditor />
                 </div>
                 <div class="mb-3">
                     <label for="exampleInputPassword1" class="form-label">Price</label>
@@ -111,7 +115,7 @@ const AddProduct = () => {
                 </div>
                 <div class="mb-3">
                     <label for="exampleInputPassword1" class="form-label">Quantity</label>
-                    <input id='qty'  class="form-control" />
+                    <input id='qty' class="form-control" />
                 </div>
                 <div class="mb-3">
                     <label for="exampleInputPassword1" class="form-label">Brands</label>
@@ -145,16 +149,16 @@ const AddProduct = () => {
                 </div>
                 <div class="mb-3 uploadImg">
                     <div className="uploadImg-btn">
-                    <img src={upload} alt="" />
-                    <input onChange={(event)=>handleImgUploader(event)} type="file" />
-                    <p style={{fontSize:'2rem',color:'#000000',fontWeight:'700',paddingLeft:'7px'}}>Upload Image</p>
+                        <img src={upload} alt="" />
+                        <input onChange={(event) => handleImgUploader(event)} type="file" />
+                        <p style={{ fontSize: '2rem', color: '#000000', fontWeight: '700', paddingLeft: '7px' }}>Upload Image</p>
                     </div>
                     <div className="uploadImg-container">
-                        {imgContainer && imgContainer.map((sig,index)=> <ImgUploaderPreview key={index} deleteHandler={deleteHandler} id={sig.id} altHandler={altHandler} src={sig.src} alt={sig.alt}/>)}
-                        
+                        {imgContainer && imgContainer.map((sig, index) => <ImgUploaderPreview key={index} deleteHandler={deleteHandler} id={sig.id} altHandler={altHandler} src={sig.src} alt={sig.alt} />)}
+
                     </div>
                 </div>
-                <button type="submit" style={{fontSize:'2rem'}} className='btn btn-outline-dark my-5'>Create Product</button>
+                <button type="submit" style={{ fontSize: '2rem' }} className='btn btn-outline-dark my-5'>Create Product</button>
             </form>
         </div>
     )

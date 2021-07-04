@@ -21,6 +21,9 @@ body {
     overflow: hidden;
 }
 
+.quill{
+    height: 57vh;
+}
 @media screen and ( max-width:700px) {
     html{
         font-size: 57.25%

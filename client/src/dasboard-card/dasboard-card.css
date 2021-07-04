@@ -1,0 +1,11 @@
+.dasboard-card{
+    width: 20%;
+    min-height: 17vh;
+    margin: 1% ;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    box-shadow: rgb(0 0 0 / 10%) -3px -1px 20px 12px;
+    border-radius: 13px;
+}
