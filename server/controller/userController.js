@@ -99,3 +99,59 @@ exports.userWishlistDetailsController = async (req, res, next) => {
     })
 
 }
+
+exports.userReviewsGetController = async (req, res, next) => {
+    let { userId } = req.params
+
+    let userx = await User.findOne({ _id: userId }).populate({
+        path: 'reviews',
+        populate: {
+            path: 'user',
+            select: { 'profilePic': 1, 'name': 1 }
+        }
+    })
+
+    res.json({
+        userReviews: userx.reviews
+    })
+
+
+}
+
+exports.uploadProfilePicController = async (req, res, next) => {
+    let { userId, imgUrl } = req.body
+    console.log(imgUrl);
+    let userx = await User.findOneAndUpdate({ _id: userId }, {
+        $set: { profilePic: imgUrl }
+    })
+
+    res.json({
+        userx,
+        msg: 'Successfully,updated your profile pic',
+        color: 'success'
+    })
+
+}
+
+
+exports.updatecartedProductController = async (req, res, next) => {
+    let { cartedProduct, userId } = req.body
+    console.log(userId);
+    await User.findOneAndUpdate({ _id: userId }, {
+        $set: { cartedItems: cartedProduct }
+    })
+
+    return res.json({
+        msg: 'Update carted product to user database'
+    })
+}
+
+exports.userCartedProductGetController = async (req, res, next) => {
+    let { userId } = req.params
+    console.log(userId);
+    let userx = await User.findOne({ _id: userId })
+
+    res.json({
+        cartedProduct: userx.cartedItems
+    })
+}

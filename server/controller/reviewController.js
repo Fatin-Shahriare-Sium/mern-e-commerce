@@ -29,7 +29,7 @@ exports.createReviewController = async (req, res, next) => {
 exports.reviewFinderThroughProductid = async (req, res, next) => {
     let { productId } = req.query
 
-    let allReviews = await Review.find({ productId }).populate({
+    let allReviews = await Review.find({ productId }).sort({ 'createdAt': '-1' }).populate({
         path: 'user',
         select: { 'profilePic': 1, 'name': 1 }//you have to do this to get only user profilepic and name.it is object so,we use 1 .but,it wil change with what we need
     })

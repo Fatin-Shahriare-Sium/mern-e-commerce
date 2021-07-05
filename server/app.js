@@ -24,8 +24,13 @@ app.use('/user', userRouter)
 app.use('/address', addressRouter)
 app.use('/order', orederRouter)
 app.use('/review', reviewRouter)
-
-app.listen('5000', () => {
+app.use('/', (req, res) => {
+    return res.json({
+        myCreator: 'Allah.Allah is Almighty',
+        status: 'MERN STACK E-commerce'
+    })
+})
+app.listen(process.env.PORT || '5000', () => {
     console.log('Server is running successfully,Alhamdulillah');
 })
 //chat functionalities https://crisp.chat
