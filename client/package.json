@@ -17,6 +17,7 @@
     "editorjs-inline-font-size-tool": "^1.0.1",
     "editorjs-inline-template": "^1.0.0",
     "editorjs-inline-tool": "^0.4.0",
+    "editorjs-paragraph-with-alignment": "^3.0.0",
     "editorjs-parser": "^1.5.3",
     "moment": "^2.29.1",
     "react": "^17.0.2",

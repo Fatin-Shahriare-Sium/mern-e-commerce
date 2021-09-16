@@ -24,6 +24,9 @@ body {
 .quill{
     height: 57vh;
 }
+.ce-paragraph {
+    font-size: 1.5rem;
+}
 @media screen and ( max-width:700px) {
     html{
         font-size: 57.25%
