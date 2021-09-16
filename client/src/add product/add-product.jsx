@@ -91,6 +91,10 @@ const AddProduct = () => {
         let filterImgContainer = imgContainer.filter(sig => sig.id !== id)
         setImgContainer(() => filterImgContainer)
     }
+    function bringRawHtml(html) {
+        let viewx = document.getElementById('view')
+        viewx.innerHTML = html
+    }
     return (
         <div className='addProduct'>
             <p style={{ textAlign: 'center', fontSize: '2.3rem', color: '#000000', fontWeight: '700' }}>Add Product</p>
@@ -103,7 +107,10 @@ const AddProduct = () => {
                 <div class="mb-3">
                     <label for="exampleInputPassword1" class="form-label">Description</label>
                     {/* <textarea class="form-control" id='description' /> */}
-                    <TextEditor />
+                    <TextEditor getHtml={bringRawHtml} />
+                </div>
+                <div id='view'>
+
                 </div>
                 <div class="mb-3">
                     <label for="exampleInputPassword1" class="form-label">Price</label>
