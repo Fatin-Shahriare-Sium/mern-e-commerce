@@ -1,7 +1,8 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import EditorJs from 'react-editor-js';
 import Embed from '@editorjs/embed'
 import Table from '@editorjs/table'
+import AlignmentTuneTool from 'editorjs-text-alignment-blocktune'
 import Paragraph from 'editorjs-paragraph-with-alignment'
 import List from '@editorjs/list'
 import Warning from '@editorjs/warning'
@@ -40,7 +41,9 @@ export const EDITOR_JS_TOOLS = {
             placeholder: 'Enter a header',
             levels: [1, 2, 3, 4, 5, 6],
             defaultLevel: 1
-        }
+        },
+        inlineToolbar: true,
+        tunes: ['anyTuneName']
     },
     quote: Quote,
     marker: Marker,
@@ -71,35 +74,30 @@ export const EDITOR_JS_TOOLS = {
                 }
             }
         }
+    },
+    anyTuneName: {
+        class: AlignmentTuneTool,
+        config: {
+            default: "right"
+        },
     }
 }
 
-const TextEditor = ({ getHtml }) => {
+const TextEditor = ({ getHtml, needToPreview }) => {
     let [text, setText] = useState(localStorage.getItem('__description'))
     const editorIntance = useRef(null)
-    let see = (data) => {
-        console.log(data);
-    }
-
-    const customParsers = {
-        customBlock: function (data, config) {
-            // parsing functionality
-            // the config arg is user provided config merged with default config
-        },
-        image: function (data, config) {
-            return `<img src="${data.file.url}" alt="${data.caption}" >`
-        }
-    }
-
-    const parser = new edjsParser(undefined, customParsers);
 
     async function handleSave() {
         const savedData = await editorIntance.current.save()
-        console.log(savedData)
-        let markup = parser.parse(savedData)
-
-        getHtml(markup)
+        console.log('cliced');
+        return getHtml(savedData)
     }
+
+    useEffect(() => {
+        if (needToPreview) {
+            handleSave()
+        }
+    }, [needToPreview])
 
 
 
@@ -142,9 +140,10 @@ const TextEditor = ({ getHtml }) => {
 
     return (
         <>
-            <EditorJs inlineToolbar={true} instanceRef={(instance) => (editorIntance.current = instance)} onChange={handleSave} onCompareBlocks={(data) => { console.log(data); }} tools={EDITOR_JS_TOOLS} />;
+            <EditorJs inlineToolbar={true} instanceRef={(instance) => (editorIntance.current = instance)} tools={EDITOR_JS_TOOLS} />;
         </>
     )
 }
 
 export default TextEditor;
+

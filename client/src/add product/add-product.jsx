@@ -10,7 +10,7 @@ const AddProduct = () => {
     let [imgContainer, setImgContainer] = useState([])
     let [edit, setEdit] = useState(false)
     let { handleCreateProduct, error } = useCreateProduct()
-
+    let [preview, setPreview] = useState(false)
     //cd backend/mern-cart
     let location = useLocation()
     let { id } = useParams()
@@ -91,9 +91,16 @@ const AddProduct = () => {
         let filterImgContainer = imgContainer.filter(sig => sig.id !== id)
         setImgContainer(() => filterImgContainer)
     }
-    function bringRawHtml(html) {
+    async function bringRawHtml(html) {
+        console.log('cliced');
+        console.log(html);
         let viewx = document.getElementById('view')
         viewx.innerHTML = html
+    }
+    async function showPreview() {
+        let html = await bringRawHtml()
+        console.log(html);
+
     }
     return (
         <div className='addProduct'>
@@ -107,8 +114,9 @@ const AddProduct = () => {
                 <div class="mb-3">
                     <label for="exampleInputPassword1" class="form-label">Description</label>
                     {/* <textarea class="form-control" id='description' /> */}
-                    <TextEditor getHtml={bringRawHtml} />
+
                 </div>
+                <TextEditor getHtml={bringRawHtml} needToPreview={preview} />
                 <div id='view'>
 
                 </div>
@@ -166,6 +174,7 @@ const AddProduct = () => {
                     </div>
                 </div>
                 <button type="submit" style={{ fontSize: '2rem' }} className='btn btn-outline-dark my-5'>Create Product</button>
+                <button onClick={() => setPreview(pre => !pre)} type='button'>Preview</button>
             </form>
         </div>
     )
