@@ -4,18 +4,21 @@ import UseUrl from "./useUrl"
 
 let useCreateProduct = () => {
     let [error, setError] = useState('')
+    let [loading, setLodaing] = useState(false)
     let { url } = UseUrl()
 
     let handleCreateProduct = (e, imgContainer, edit, id) => {
         e.preventDefault()
-
+        console.log(e);
+        setLodaing(true)
         let title = e.target[0].value
         let description = localStorage.getItem('__description')
-        let price = e.target[27].value
-        let priceOff = e.target[28].value
-        let qty = e.target[29].value
-        let brand = e.target[30].value
-        let category = e.target[31].value
+        let price = e.target[1].value
+        console.log('description', description);
+        let priceOff = e.target[2].value
+        let qty = e.target[3].value
+        let brand = e.target[4].value
+        let category = e.target[5].value
 
         if (title && description && price) {
             fetch(edit ? `${url}/product/edit/${id}` : `${url}/product/create`, {
@@ -36,12 +39,13 @@ let useCreateProduct = () => {
             }).then(res => res.json())
                 .then(data => {
                     console.log(data);
+                    setLodaing(false)
                     setError({ msg: data.msg, color: data.color })
                 })
         }
     }
 
-    return { handleCreateProduct, error }
+    return { handleCreateProduct, error, loading }
 }
 
 export default useCreateProduct;

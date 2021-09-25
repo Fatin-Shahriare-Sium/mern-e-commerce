@@ -4,12 +4,13 @@ import upload from '../assets/upload.svg'
 import ImgUploaderPreview from './img-uploader-preview'
 import useCreateProduct from '../hooks/useCreateProduct'
 import { useLocation, useParams } from 'react-router'
-import TextEditor from '../text-editor'
+import TextEditor from '../editor/text-editor'
+
 
 const AddProduct = () => {
     let [imgContainer, setImgContainer] = useState([])
     let [edit, setEdit] = useState(false)
-    let { handleCreateProduct, error } = useCreateProduct()
+    let { handleCreateProduct, error, loading } = useCreateProduct()
     let [preview, setPreview] = useState(false)
     //cd backend/mern-cart
     let location = useLocation()
@@ -43,12 +44,6 @@ const AddProduct = () => {
         }
 
     }, [])
-
-
-
-
-
-
 
 
     let handleImgUploader = (e) => {
@@ -91,17 +86,8 @@ const AddProduct = () => {
         let filterImgContainer = imgContainer.filter(sig => sig.id !== id)
         setImgContainer(() => filterImgContainer)
     }
-    async function bringRawHtml(html) {
-        console.log('cliced');
-        console.log(html);
-        let viewx = document.getElementById('view')
-        viewx.innerHTML = html
-    }
-    async function showPreview() {
-        let html = await bringRawHtml()
-        console.log(html);
 
-    }
+    // onSubmit={(event) => handleCreateProduct(event, imgContainer, edit, id)}
     return (
         <div className='addProduct'>
             <p style={{ textAlign: 'center', fontSize: '2.3rem', color: '#000000', fontWeight: '700' }}>Add Product</p>
@@ -114,12 +100,9 @@ const AddProduct = () => {
                 <div class="mb-3">
                     <label for="exampleInputPassword1" class="form-label">Description</label>
                     {/* <textarea class="form-control" id='description' /> */}
-
+                    <TextEditor needToPreview={preview} />
                 </div>
-                <TextEditor getHtml={bringRawHtml} needToPreview={preview} />
-                <div id='view'>
 
-                </div>
                 <div class="mb-3">
                     <label for="exampleInputPassword1" class="form-label">Price</label>
                     <input id='price' class="form-control" />
@@ -173,8 +156,8 @@ const AddProduct = () => {
 
                     </div>
                 </div>
-                <button type="submit" style={{ fontSize: '2rem' }} className='btn btn-outline-dark my-5'>Create Product</button>
-                <button onClick={() => setPreview(pre => !pre)} type='button'>Preview</button>
+                <button onClick={() => setPreview(pre => true)} type="submit" style={{ fontSize: '2rem' }} className='btn btn-outline-dark my-5'>{loading ? 'loading...' : 'Create Product'}</button>
+
             </form>
         </div>
     )
