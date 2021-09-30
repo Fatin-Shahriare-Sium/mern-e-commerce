@@ -7,9 +7,9 @@ let useCreateProduct = () => {
     let [loading, setLodaing] = useState(false)
     let { url } = UseUrl()
 
-    let handleCreateProduct = (e, imgContainer, edit, id) => {
+    let handleCreateProduct = (e, imgContainer, edit, id, editorData) => {
         e.preventDefault()
-        console.log(e);
+        console.log('editorData', editorData);
         setLodaing(true)
         let title = e.target[0].value
         let description = localStorage.getItem('__description')

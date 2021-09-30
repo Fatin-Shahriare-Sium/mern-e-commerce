@@ -20,7 +20,7 @@ let blocks = [
     }
 ]
 
-const TextEditor = ({ needToPreview }) => {
+const TextEditor = ({ needToUpdate, updateEditorState }) => {
     let [text, setText] = useState(localStorage.getItem('__description'))
 
     const editorIntance = useRef(null)
@@ -28,17 +28,28 @@ const TextEditor = ({ needToPreview }) => {
 
     async function handleSave() {
         const savedData = await editorIntance.current.save()
-        return convertDataToHtml(savedData.blocks)
+        console.log('savedData.blocks', savedData.blocks);
+        let convertedHtml = convertDataToHtml(savedData.blocks)
+        return updateEditorState(savedData.blocks, convertedHtml)
 
     }
 
 
 
     useEffect(() => {
-        console.log(needToPreview);
-        if (needToPreview) {
+        console.log(needToUpdate);
+        if (needToUpdate) {
             handleSave()
         }
+        let settingBtn = document.getElementsByClassName('ce-toolbar__actions-buttons')
+
+        settingBtn[0].addEventListener('click', () => {
+            let blockTuneAligenBtn = document.getElementsByClassName('cdx-settings-button')
+                ;[...blockTuneAligenBtn].forEach((sig) => sig.setAttribute('type', 'button'))
+            console.log(blockTuneAligenBtn);
+        })
+
+
 
 
         // let back = document.getElementById('custom')
@@ -60,7 +71,7 @@ const TextEditor = ({ needToPreview }) => {
         // console.log(table);
 
 
-    }, [needToPreview])
+    }, [needToUpdate])
 
 
 

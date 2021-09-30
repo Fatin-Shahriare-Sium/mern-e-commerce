@@ -2,7 +2,8 @@ import React from 'react'
 import Embed from '@editorjs/embed'
 import Table from '@editorjs/table'
 import AlignmentTuneTool from 'editorjs-text-alignment-blocktune'
-import Paragraph from 'editorjs-paragraph-with-alignment'
+// import Paragraph from 'editorjs-paragraph-with-alignment'
+import Paragraph from '@editorjs/paragraph'
 import List from '@editorjs/list'
 import Warning from '@editorjs/warning'
 import Code from '@editorjs/code'
@@ -27,6 +28,7 @@ const editorTools = () => {
         paragraph: {
             class: Paragraph,
             inlineToolbar: true,
+            tunes: ['anyTuneName']
         },
         list: List,
         warning: Warning,

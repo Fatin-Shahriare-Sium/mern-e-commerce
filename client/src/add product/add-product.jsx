@@ -10,12 +10,21 @@ import TextEditor from '../editor/text-editor'
 const AddProduct = () => {
     let [imgContainer, setImgContainer] = useState([])
     let [edit, setEdit] = useState(false)
+    let [editorData, setEditorData] = useState({ blocks: '', html: '' })
     let { handleCreateProduct, error, loading } = useCreateProduct()
-    let [preview, setPreview] = useState(false)
+    let [update, setUpdate] = useState(false)
     //cd backend/mern-cart
     let location = useLocation()
     let { id } = useParams()
+
     useEffect(() => {
+        // setTimeout(() => {
+
+        //     let blockTuneAligenBtn = document.getElementsByClassName('cdx-settings-button')
+        //     console.log(blockTuneAligenBtn);
+        //     [...blockTuneAligenBtn].forEach((sig) => sig.setAttribute('type', 'button'))
+        //     // blockTuneAligenBtn.setAttribute('type', 'button')
+        // }, 9000)
         let name = document.getElementById('name')
         let price = document.getElementById('price')
         let priceoff = document.getElementById('priceoff')
@@ -44,6 +53,10 @@ const AddProduct = () => {
         }
 
     }, [])
+
+    function updateEditorData(blocks, html) {
+        return setEditorData({ blocks, html })
+    }
 
 
     let handleImgUploader = (e) => {
@@ -92,7 +105,7 @@ const AddProduct = () => {
         <div className='addProduct'>
             <p style={{ textAlign: 'center', fontSize: '2.3rem', color: '#000000', fontWeight: '700' }}>Add Product</p>
             {error && <p classname={`alert alert-${error.color}`}>{error.msg}</p>}
-            <form onSubmit={(event) => handleCreateProduct(event, imgContainer, edit, id)}>
+            <form onSubmit={(event) => handleCreateProduct(event, imgContainer, edit, id, editorData)}>
                 <div class="mb-3">
                     <label for="exampleInputEmail1" class="form-label">Title</label>
                     <input type="text" class="form-control" id='name' aria-describedby="emailHelp" />
@@ -100,7 +113,7 @@ const AddProduct = () => {
                 <div class="mb-3">
                     <label for="exampleInputPassword1" class="form-label">Description</label>
                     {/* <textarea class="form-control" id='description' /> */}
-                    <TextEditor needToPreview={preview} />
+                    <TextEditor needToPreview={update} updateEditorState={updateEditorData} />
                 </div>
 
                 <div class="mb-3">
@@ -156,7 +169,7 @@ const AddProduct = () => {
 
                     </div>
                 </div>
-                <button onClick={() => setPreview(pre => true)} type="submit" style={{ fontSize: '2rem' }} className='btn btn-outline-dark my-5'>{loading ? 'loading...' : 'Create Product'}</button>
+                <button onClick={() => setUpdate(pre => true)} type="submit" style={{ fontSize: '2rem' }} className='btn btn-outline-dark my-5'>{loading ? 'loading...' : 'Create Product'}</button>
 
             </form>
         </div>
