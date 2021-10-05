@@ -2,42 +2,29 @@ import React, { useState, useRef, useEffect } from 'react'
 import EditorJs from 'react-editor-js';
 import editorTools from './text-editor-tools';
 
-
-let x = `<h1 class='single-product-details__title'>Allah is Almighty</h1><thead><tr><td>Car</td><td>Rocket</td></tr></thead><tbody><tr><td>CHEAP</td><td>EXPENSIVE</td></tr><tr><td>Slow</td><td>Speedy</td></tr></tbody>`
-
-let blocks = [
-    {
-        type: "image",
-        data: {
-            url: "https://cdn.pixabay.com/photo/2017/09/01/21/53/blue-2705642_1280.jpg"
-        }
-    },
-    {
-        type: 'paragraph',
-        data: {
-            text: 'ffff'
-        }
-    }
-]
-
-const TextEditor = ({ needToUpdate, updateEditorState }) => {
-    let [text, setText] = useState(localStorage.getItem('__description'))
+const TextEditor = ({ needToUpdate, updateEditorState, hasData }) => {
 
     const editorIntance = useRef(null)
     let { EDITOR_JS_TOOLS } = editorTools()
+    let [prevData, setPrevData] = useState({})
 
     async function handleSave() {
         const savedData = await editorIntance.current.save()
-        console.log('savedData.blocks', savedData.blocks);
+        console.log('savedData.blocks', savedData);
         let convertedHtml = convertDataToHtml(savedData.blocks)
-        return updateEditorState(savedData.blocks, convertedHtml)
+        return updateEditorState(savedData, convertedHtml)
 
     }
+
+    useEffect(() => {
+        setPrevData({ ...prevData, hasData })
+        console.log('has blocks', hasData);
+    }, [JSON.stringify(hasData)])
 
 
 
     useEffect(() => {
-        console.log(needToUpdate);
+
         if (needToUpdate) {
             handleSave()
         }
@@ -130,29 +117,12 @@ const TextEditor = ({ needToUpdate, updateEditorState }) => {
             }
         });
 
-        return localStorage.setItem('__description', convertedHtml)
+        return convertedHtml
     }
 
     return (
         <>
-            <EditorJs data={{
-                time: 1552744582955,
-                blocks: [
-                    {
-                        type: "image",
-                        data: {
-                            url: "https://cdn.pixabay.com/photo/2017/09/01/21/53/blue-2705642_1280.jpg"
-                        }
-                    },
-                    {
-                        type: 'paragraph',
-                        data: {
-                            text: 'ffff'
-                        }
-                    }
-                ],
-                version: "2.11.10"
-            }} inlineToolbar={true} instanceRef={(instance) => (editorIntance.current = instance)} tools={EDITOR_JS_TOOLS} >
+            <EditorJs data={hasData} inlineToolbar={true} instanceRef={(instance) => (editorIntance.current = instance)} tools={EDITOR_JS_TOOLS} >
 
             </EditorJs>
         </>

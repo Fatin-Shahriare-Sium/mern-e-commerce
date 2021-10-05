@@ -10,17 +10,17 @@ let useCreateProduct = () => {
     let handleCreateProduct = (e, imgContainer, edit, id, editorData) => {
         e.preventDefault()
         console.log('editorData', editorData);
-        setLodaing(true)
-        let title = e.target[0].value
-        let description = localStorage.getItem('__description')
-        let price = e.target[1].value
-        console.log('description', description);
-        let priceOff = e.target[2].value
-        let qty = e.target[3].value
-        let brand = e.target[4].value
-        let category = e.target[5].value
 
+        let title = e.target[0].value
+        let description = editorData.html
+        let price = e.target[8].value
+        let priceOff = e.target[9].value
+        let qty = e.target[10].value
+        let brand = e.target[11].value
+        let category = e.target[12].value
+        console.log('description', price);
         if (title && description && price) {
+            setLodaing(true)
             fetch(edit ? `${url}/product/edit/${id}` : `${url}/product/create`, {
                 method: 'POST',
                 headers: {
@@ -34,7 +34,8 @@ let useCreateProduct = () => {
                     qty,
                     brand,
                     category,
-                    img: imgContainer
+                    img: imgContainer,
+                    editorBlocks: editorData.dataOfBlocks
                 })
             }).then(res => res.json())
                 .then(data => {

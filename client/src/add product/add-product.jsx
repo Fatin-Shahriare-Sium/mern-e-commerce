@@ -10,8 +10,30 @@ import TextEditor from '../editor/text-editor'
 const AddProduct = () => {
     let [imgContainer, setImgContainer] = useState([])
     let [edit, setEdit] = useState(false)
-    let [editorData, setEditorData] = useState({ blocks: '', html: '' })
+    let [editorData, setEditorData] = useState({ dataOfBlocks: {}, html: '' })
     let { handleCreateProduct, error, loading } = useCreateProduct()
+    let [readyToRenderEditor, setReadyToRendetEditor] = useState(false)
+    let [hasBlocks, setHasBlocks] = useState({
+        time: 1552744582955,
+        blocks: [
+            {
+                type: "header",
+                data: {
+                    text: 'Enter the product title',
+                    level: 1
+                }
+            },
+            {
+                type: 'paragraph',
+                data: {
+                    text: 'Below the details'
+                }
+            }
+        ],
+        version: "2.11.10"
+    })
+
+
     let [update, setUpdate] = useState(false)
     //cd backend/mern-cart
     let location = useLocation()
@@ -31,7 +53,6 @@ const AddProduct = () => {
         let qty = document.getElementById('qty')
         let brand = document.getElementById('brand')
         let category = document.getElementById('category')
-        localStorage.setItem('__description', '')
         if (location.pathname == `/dasboard/product/edit/${id}`) {
             console.log('in location' + id);
             fetch(`http://localhost:5000/product/${id}`, {
@@ -40,7 +61,7 @@ const AddProduct = () => {
                 .then(data => {
                     console.log(data);
                     name.value = data.singleProduct.title
-                    localStorage.setItem('__description', data.singleProduct.description)
+
                     price.value = data.singleProduct.price
                     priceoff.value = data.singleProduct.priceOff
                     qty.value = data.singleProduct.remain
@@ -48,14 +69,28 @@ const AddProduct = () => {
                     brand.value = data.singleProduct.brand
                     category.value = data.singleProduct.category
                     setEdit(true)
+                    setEditorData({ dataOfBlocks: data.singleProduct.editorBlocks, html: data.singleProduct.description })
+                    setHasBlocks({
+                        ...hasBlocks,
+                        time: data.singleProduct.editorBlocks.time,
+                        blocks: data.singleProduct.editorBlocks.blocks,
+                        version: data.singleProduct.editorBlocks.version
+                    })
                     setImgContainer(data.singleProduct.img)
+                    setReadyToRendetEditor(true)
                 })
+        } else {
+            setReadyToRendetEditor(true)
         }
 
     }, [])
 
-    function updateEditorData(blocks, html) {
-        return setEditorData({ blocks, html })
+    useEffect(() => {
+        console.log('has useeffect', hasBlocks);
+    }, [JSON.stringify(hasBlocks)])
+
+    function updateEditorData(dataOfBlocks, html) {
+        return setEditorData({ dataOfBlocks, html })
     }
 
 
@@ -113,7 +148,9 @@ const AddProduct = () => {
                 <div class="mb-3">
                     <label for="exampleInputPassword1" class="form-label">Description</label>
                     {/* <textarea class="form-control" id='description' /> */}
-                    <TextEditor needToPreview={update} updateEditorState={updateEditorData} />
+                    <div>
+                        {readyToRenderEditor && <TextEditor needToUpdate={update} updateEditorState={updateEditorData} hasData={hasBlocks} />}
+                    </div>
                 </div>
 
                 <div class="mb-3">
@@ -169,7 +206,7 @@ const AddProduct = () => {
 
                     </div>
                 </div>
-                <button onClick={() => setUpdate(pre => true)} type="submit" style={{ fontSize: '2rem' }} className='btn btn-outline-dark my-5'>{loading ? 'loading...' : 'Create Product'}</button>
+                <button onClick={() => setUpdate(pre => true)} type="submit" style={{ fontSize: '2rem' }} className='btn btn-outline-dark my-5'>{loading ? 'loading...' : edit ? 'Edit' : 'Create Product'}</button>
 
             </form>
         </div>
