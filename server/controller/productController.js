@@ -1,7 +1,7 @@
 const Product = require("../model/product")
 
 exports.createProductController = async (req, res, next) => {
-    let { title, description, price, priceOff, brand, category, qty, img } = req.body
+    let { title, description, price, priceOff, brand, category, qty, img, editorBlocks } = req.body
 
     console.log(req.body);
     let newProduct = new Product({
@@ -13,25 +13,27 @@ exports.createProductController = async (req, res, next) => {
         category,
         remain: qty,
         img,
-        reviews: []
+        reviews: [],
+        editorBlocks
     })
 
     try {
         await newProduct.save()
 
 
-        res.json({
+        return res.json({
             msg: 'Successfully,created a product',
             color: 'success',
         })
 
     } catch {
-        res.json({
+        return res.json({
             msg: 'Failed to create product',
             color: 'danger',
         })
 
     }
+
 }
 
 exports.getAllProductController = async (req, res, next) => {
@@ -57,10 +59,10 @@ exports.getSingleProduct = async (req, res, next) => {
 }
 
 exports.editSingleProductController = async (req, res, next) => {
-    let { title, description, price, priceOff, brand, category, qty, img } = req.body
+    let { title, description, price, priceOff, brand, category, qty, img, editorBlocks } = req.body
     let { id } = req.params
     console.log(req.body);
-    await Product.findOneAndUpdate({ _id: id }, { $set: { title, description, price, priceOff, brand, category, qty, img } })
+    await Product.findOneAndUpdate({ _id: id }, { $set: { title, description, price, priceOff, brand, category, qty, img, editorBlocks } })
 
     try {
         res.status(200).json({

@@ -14,6 +14,11 @@ let productSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'review'
     }],
+    editorBlocks: { //editorBlocks is the great example how we can define object in mongoose
+        time: Number,
+        blocks: [],
+        version: String
+    }
 })
 
 productSchema.index({
