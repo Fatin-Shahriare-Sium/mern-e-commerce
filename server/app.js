@@ -8,9 +8,11 @@ let addressRouter = require('./route/addressRoute.js')
 let orederRouter = require('./route/orderRoute.js')
 let reviewRouter = require('./route/reviewRoute.js')
 let mongoose = require('mongoose')
-mongoose.connect(`mongodb+srv://${process.env.DATABASE_ADMIN}:${process.env.DATABASE_PASSWORD}@cluster0.czfmh.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`, { useNewUrlParser: true, useUnifiedTopology: true }, () => {
-    console.log('MongoDB connected successfully,Alhamdulillah');
-});
+mongoose.connect(`mongodb+srv://${process.env.DB_ADMIN}:${process.env.DB_PASSWORD}@cluster0.bbpolw9.mongodb.net/?retryWrites=true&w=majority`, { useNewUrlParser: true, useUnifiedTopology: true }).then(() => {
+    console.log('connected mongodb,Alhamdulillah');
+})
+console.log(process.env.DB_PASSWORD);
+
 let app = express()
 let middleware = [
     express.urlencoded({ extended: true }),
