@@ -1,7 +1,7 @@
 import logo from './logo.svg';
-import './app.css';
 import Navbar from './navbar/navbar';
 import LoginBox from './loginBox/loginBox';
+import "./App.css";
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import Dasboard from './dasboard/dasboard';
 import OrderDetails from './order/orderdetails';

@@ -7,6 +7,7 @@ let useCreateProduct = () => {
     let { url } = UseUrl()
 
     let handleCreateProduct = (e, imgContainer, edit, id) => {
+        console.log(e)
         e.preventDefault()
 
         let title = e.target[0].value
@@ -16,7 +17,7 @@ let useCreateProduct = () => {
         let qty = e.target[29].value
         let brand = e.target[30].value
         let category = e.target[31].value
-
+ 
         if (title && description && price) {
             fetch(edit ? `${url}/product/edit/${id}` : `${url}/product/create`, {
                 method: 'POST',

@@ -12,7 +12,7 @@ const AllProduct = () => {
     },[])
     return (
         <div className='all-product'>
-            {allProduct && allProduct.map((sig,index)=> <SingleProduct img={sig.img[0].src} qty={sig.qty} price={sig.price} id={sig._id} name={sig.title}/>)}
+            {allProduct && allProduct.map((sig,index)=> <SingleProduct img={sig.img.length>0?sig.img[0].src:"sss"} qty={sig.qty} price={sig.price} id={sig._id} name={sig.title}/>)}
         </div>
     )
 }
