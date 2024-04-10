@@ -3,7 +3,7 @@ let { Schema, model } = require('mongoose')
 let orderModel = new Schema({
     user: {
         type: Schema.Types.ObjectId,
-        ref: 'user'
+        ref: 'user_com'
     },
     address: {
         type: Schema.Types.ObjectId,

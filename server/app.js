@@ -27,9 +27,11 @@ app.use('/address', addressRouter)
 app.use('/order', orederRouter)
 app.use('/review', reviewRouter)
 app.use('/', (req, res) => {
+    //res.setHeader("Access-Control-Allow-Origin", "*");
     return res.json({
         myCreator: 'Allah.Allah is Almighty',
-        status: 'MERN STACK E-commerce'
+        status: 'MERN STACK E-commerce',
+        
     })
 })
 app.listen(process.env.PORT || '5000', () => {

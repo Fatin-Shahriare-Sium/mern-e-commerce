@@ -28,6 +28,6 @@ let userModel = new Schema({
     }]
 })
 
-let User = model('user_e_com_web', userModel)
+let User = model('user_com', userModel)
 
 module.exports = User

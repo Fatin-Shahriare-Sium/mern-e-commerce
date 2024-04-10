@@ -3,7 +3,7 @@ let { Schema, model } = require('mongoose')
 let reviewSchema = new Schema({
     user: {
         type: Schema.Types.ObjectId,
-        ref: 'user'
+        ref: 'user_com'
     },
     productId: {
         type: Schema.Types.ObjectId,

@@ -11,7 +11,7 @@ let addressSchema=new Schema({
     postalCode:String,
     user:{
         type:Schema.Types.ObjectId,
-        ref:'user'
+        ref:'user_com'
     }
 })
 

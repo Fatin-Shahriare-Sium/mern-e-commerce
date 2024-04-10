@@ -18,7 +18,7 @@ exports.signupPostController=async (req,res,next)=>{
         gender:'Male',
         brithDate:'N/A',
         contactNumber:'N/A',
-        address:'',
+        address:"",
         cartedItems:[],
         orderItems:[],
         wishlistItems:[],
